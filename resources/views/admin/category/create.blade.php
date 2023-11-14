@@ -9,7 +9,7 @@
                     <h1>Create Category</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{route("categories.index")}}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('categories.index') }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -41,6 +41,17 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="image">Image</label>
+                                    <input type="hidden" id="image_id" name="image_id" value="">
+                                    <div id="image" class="dropzone dz-clickable">
+                                        <div class="dz-message needsclick">    
+                                            <br>Drop files here or click to upload.<br><br>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
                                         <option value="1">Active</option>
@@ -53,7 +64,7 @@
                 </div>
                 <div class="pb-5 pt-3">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="{{route("categories.index")}}" class="btn btn-outline-dark ml-3">Cancel</a>
+                    <a href="{{ route('categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -67,7 +78,7 @@
         $("#categoryForm").submit(function(event) {
             event.preventDefault();
             var element = $(this);
-            $("button[type=submit]").prop("disabled",true)
+            $("button[type=submit]").prop("disabled", true)
 
             $.ajax({
                 url: "{{ route('categories.store') }}",
@@ -75,11 +86,11 @@
                 data: element.serializeArray(),
                 dataType: "json",
                 success: function(response) {
-                    $("button[type=submit]").prop("disabled",false)
+                    $("button[type=submit]").prop("disabled", false)
 
                     if (response["status"] == true) {
 
-                        window.location.href="{{route("categories.index")}}";
+                        window.location.href = "{{ route('categories.index') }}";
 
                         $("#name").removeClass("is-invalid")
                             .siblings("p").removeClass("invalid-feedback")
@@ -122,22 +133,47 @@
             })
         });
 
-        $("#name").change(function(){
+        $("#name").change(function() {
             element = $(this);
-            $("button[type=submit]").prop("disabled",true)
-        $.ajax({
-            url: "{{ route('getSlug') }}",
-            type: "get",
-            data: {title: element.val()},
-            dataType: "json",
-            success: function(response) {
-                $("button[type=submit]").prop("disabled",false)
-                if (response["status"]==true){
-                    $("#slug").val(response["slug"]);
-                }
+            $("button[type=submit]").prop("disabled", true)
+            $.ajax({
+                url: "{{ route('getSlug') }}",
+                type: "get",
+                data: {
+                    title: element.val()
+                },
+                dataType: "json",
+                success: function(response) {
+                    $("button[type=submit]").prop("disabled", false)
+                    if (response["status"] == true) {
+                        $("#slug").val(response["slug"]);
+                    }
 
+                }
+            });
+        });
+
+        Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
+            init: function() {
+                this.on('addedfile', function(file) {
+                    if (this.files.length > 1) {
+                        this.removeFile(this.files[0]);
+                    }
+                });
+            },
+            url: "{{ route('temp-images.create') }}",
+            maxFiles: 1,
+            paramName: 'image',
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(file, response) {
+                $("#image_id").val(response.image_id);
+                //console.log(response)
             }
         });
-    });
     </script>
 @endsection
