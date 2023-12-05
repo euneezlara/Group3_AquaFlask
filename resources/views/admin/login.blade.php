@@ -12,14 +12,18 @@
 		<link rel="stylesheet" href="{{asset('admin-assets/css/adminlte.min.css')}}">
 		<link rel="stylesheet" href="{{asset('admin-assets/css/custom.css')}}">
 	</head>
-	<body class="hold-transition login-page">
+	
+	<body class="hold-transition login-page" style="background-color: #6D7B8D">
+		<div class="image-container">
+			<img src="{{ asset('admin-assets/img/AquaFlaskAdmin.png') }}" alt="Logo Login" width="500" height="90">
+		</div>
 		<div class="login-box">
 			<!-- /.login-logo -->
 
             @include('admin.message')
 			<div class="card card-outline card-primary">
 			  	<div class="card-header text-center">
-					<a href="#" class="h3">Administrative Panel</a>
+					<a href="#" class="h3">AquaFlask Admin Panel</a>
 			  	</div>
 			  	<div class="card-body">
 					<p class="login-box-msg">Sign in to start your session</p>
@@ -66,7 +70,7 @@
 				  		</div>
 					</form>
 		  			<p class="mb-1 mt-3">
-				  		<a href="forgot-password.html">I forgot my password</a>
+				  		<a href="forgot-password.html">Forgot Password</a>
 					</p>					
 			  	</div>
 			  	<!-- /.card-body -->
