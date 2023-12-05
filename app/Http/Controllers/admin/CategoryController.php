@@ -42,6 +42,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;
+            $category->showHome = $request->showHome;
             $category->save();
 
             // Save Image Here
@@ -59,7 +60,8 @@ class CategoryController extends Controller
                 $thumbPath = public_path() . "/uploads/category/thumb/" . $newImageName;
                 $img = Image::make($sPath);
                 //$img->resize(450, 600);
-                $img->fit(800, 600, function ($constraint) {
+                $img->fit(450, 600, function ($constraint) {
+                    // $constraint->aspectRatio();
                     $constraint->upsize();
                 });
                 $img->save($thumbPath);
@@ -114,6 +116,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;
+            $category->showHome = $request->showHome;
             $category->save();
 
             $oldImage = $category->image;
@@ -132,10 +135,12 @@ class CategoryController extends Controller
                 // Generate Image Thumbnail
                 $thumbPath = public_path() . "/uploads/category/thumb/" . $newImageName;
                 $img = Image::make($sPath);
-                $img->fit(800, 600, function ($constraint) {
+                $img->resize(450, 600, function ($constraint) {
+                    // $constraint->aspectRatio();
                     $constraint->upsize();
                 });
-                $img->save($thumbPath);
+                $img->save($thumbPath); 
+                
 
                 $category->image = $newImageName;
                 $category->save();
