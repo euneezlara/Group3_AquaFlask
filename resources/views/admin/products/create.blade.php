@@ -9,7 +9,7 @@
                     <h1>Create Product</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{route('products.index')}}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('products.index') }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -52,16 +52,14 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="description">Description</label>
-                                            <textarea name="description" id="description" cols="30" rows="10" class="summernote"
-                                                placeholder=""></textarea>
+                                            <textarea name="description" id="description" cols="30" rows="10" class="summernote" placeholder=""></textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="description">Shipping and Returns</label>
-                                            <textarea name="shipping_returns" id="shipping_returns" cols="30" rows="10" class="summernote"
-                                                placeholder=""></textarea>
+                                            <textarea name="shipping_returns" id="shipping_returns" cols="30" rows="10" class="summernote" placeholder=""></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -143,6 +141,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Related products</h2>
+                                <div class="mb-3">
+                                    <select multiple class= "related-product w-100" name = "related_products[]"
+                                        id = "related_products">
+                                    </select>
+                                    <p class = "error"></p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-3">
@@ -210,7 +220,7 @@
                 </div>
                 <div class="pb-5 pt-3">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="{{route('products.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
+                    <a href="{{ route('products.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </div>
         </form>
@@ -221,6 +231,21 @@
 
 @section('customJS')
     <script>
+        $('.related-product').select2({
+            ajax: {
+                url: '{{ route('products.getProducts') }}',
+                dataType: 'json',
+                tags: true,
+                multiple: true,
+                minimumInputLength: 3,
+                processResults: function(data) {
+                    return {
+                        results: data.tags
+                    };
+                }
+            }
+        });
+        
         $("#name").change(function() {
             element = $(this);
             $("button[type=submit]").prop("disabled", true)
@@ -258,7 +283,7 @@
                     if (response["status"] == true) {
                         $(".error").removeClass("invalid-feedback").html("");
                         $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
-                        window.location.href="{{route("products.index")}}";
+                        window.location.href = "{{ route('products.index') }}";
 
                     } else {
                         var errors = response["errors"];
@@ -311,16 +336,16 @@
 
         Dropzone.autoDiscover = false;
         const dropzone = new Dropzone("#image", {
-        url: "{{ route('temp-images.create') }}",
-        maxFiles: 10,
-        paramName: 'image',
-        addRemoveLinks: true,
-        acceptedFiles: "image/jpeg,image/png,image/gif",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(file, response) {
-            var html = `<div class="col-md-3" id="image-row-${response.image_id}">
+            url: "{{ route('temp-images.create') }}",
+            maxFiles: 10,
+            paramName: 'image',
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(file, response) {
+                var html = `<div class="col-md-3" id="image-row-${response.image_id}">
                 <input type="hidden" name="image_array[]" value="${response.image_id}">
                 <div class="card">
                     <img src="${response.ImagePath}" class="card-img-top" alt="">
@@ -330,18 +355,16 @@
                 </div>
             </div>`;
 
-            $("#product-gallery").append(html);
-        },
-        complete:function(file){
-            this.removeFile(file);
+                $("#product-gallery").append(html);
+            },
+            complete: function(file) {
+                this.removeFile(file);
 
+            }
+        });
+
+        function deleteImage(id) {
+            $("#image-row-" + id).remove();
         }
-    });
-
-  function deleteImage(id){
-    $("#image-row-"+id).remove();
-  }
-
-
     </script>
 @endsection

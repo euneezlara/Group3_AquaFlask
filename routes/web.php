@@ -9,6 +9,8 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\admin\ProductImageController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
@@ -30,10 +32,29 @@ use Illuminate\Http\Request;
 //     return view('welcome');
 // });
 
-Route::get('/',[FrontController::class,'index'])->name('front.home');
-Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
-Route::get('/product/{slug}',[ShopController::class,'product'])->name('front.product');
+Route::get('/', [FrontController::class, 'index'])->name('front.home');
+Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('front.shop');
+Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
+Route::get('/cart', [CartController::class, 'cart'])->name('front.cart');
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('front.addToCart');
+Route::post('/update-cart', [CartController::class, 'updateCart'])->name('front.updateCart');
+Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.deleteItem.cart');
 
+
+
+Route::group(['prefix' => 'account'], function () {
+    Route::group(['middleware' => 'guest'], function () {
+        //Login
+        Route::get('/login', [AuthController::class, 'login'])->name('account.login');
+        //Register
+        Route::get('/register', [AuthController::class, 'register'])->name('account.register');
+        Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
+    });
+    Route::group(['middleware' => 'auth'], function () {
+
+    });
+
+});
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => 'admin.guest'], function () {
@@ -51,7 +72,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
         //Edit
         Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-        Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');  
+        Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         //Delete
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
 
@@ -79,14 +100,19 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.delete');
 
+        //Get Products
+        Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
+
         Route::post('/product-images/update', [ProductImageController::class, 'update'])->name('product-images.update');
         Route::delete('/product-images', [ProductImageController::class, 'destroy'])->name('product-images.destroy');
 
         //Product Sub Category Routes
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');
-    
+
         //temp-images.create
         Route::post('/upload-temp-image', [TempImagesController::class, 'create'])->name('temp-images.create');
+
+
 
 
         Route::get('/getSlug', function (Request $request) {

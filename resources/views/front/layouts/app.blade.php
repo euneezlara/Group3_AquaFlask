@@ -45,6 +45,8 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&family=Raleway:ital,wght@0,400;0,600;0,800;1,200&family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700;900&display=swap"
         rel="stylesheet">
 
+    <meta name ="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="#" />
 </head>
@@ -56,9 +58,10 @@
             <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
                 <div class="col-lg-4 logo">
                     <a href="#" class="text-decoration-none">
-                        <img src="{{asset('front-assets/images/logo.png')}}" alt="AquaFlask SHOP" style="max-width: 200px; height: auto;">
+                        <img src="{{ asset('front-assets/images/logo.png') }}" alt="AquaFlask SHOP"
+                            style="max-width: 200px; height: auto;">
                     </a>
-                    
+
                 </div>
                 <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
                     <a href="account.php" class="nav-link text-dark">My Account</a>
@@ -79,7 +82,7 @@
     <header class="bg-dark">
         <div class="container">
             <nav class="navbar navbar-expand-xl" id="navbar">
-                <a href="index.php" class="text-decoration-none mobile-logo">
+                <a href="{{ route('front.home') }}" class="text-decoration-none mobile-logo">
                     <span class="h2 text-uppercase text-primary bg-dark">Online</span>
                     <span class="h2 text-uppercase text-white px-2">SHOP</span>
                 </a>
@@ -106,7 +109,8 @@
                                         <ul class="dropdown-menu dropdown-menu-dark">
                                             @foreach ($category->sub_category as $subCategory)
                                                 <li><a class="dropdown-item nav-link"
-                                                        href="{{route('front.shop',[$category->slug,$subCategory->slug])}}">{{ $subCategory->name }}</a></li>
+                                                        href="{{ route('front.shop', [$category->slug, $subCategory->slug]) }}">{{ $subCategory->name }}</a>
+                                                </li>
                                             @endforeach
                                         </ul>
                                     @endif
@@ -161,7 +165,7 @@
                     </ul>
                 </div>
                 <div class="right-nav py-0">
-                    <a href="cart.php" class="ml-3 d-flex pt-2">
+                    <a href="{{ route('front.cart') }}" class="ml-3 d-flex pt-2">
                         <i class="fas fa-shopping-cart text-primary"></i>
                     </a>
                 </div>
@@ -170,7 +174,7 @@
     </header>
 
     <main>
-      @yield('content')
+        @yield('content')
     </main>
 
     <footer class="bg-dark mt-5">
@@ -245,6 +249,30 @@
                 navbar.classList.remove("sticky");
             }
         }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        function addToCart(id) {
+            $.ajax({
+                url:'{{route("front.addToCart")}}',
+                type:'post',
+                data:{id:id},
+                dataType: 'json',
+                success: function(response){
+                    if (response.status == true){
+                        window.location.href = "{{route('front.cart')}}";
+                    }else{
+                        alert (response.message);
+                    }
+                }
+
+            });
+        }
+        
     </script>
     @yield ('customJs')
 </body>

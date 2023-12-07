@@ -52,16 +52,14 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="description">Description</label>
-                                            <textarea name="description" id="description" cols="30" rows="10" class="summernote"
-                                                placeholder="">{{ $product->description }}</textarea>
+                                            <textarea name="description" id="description" cols="30" rows="10" class="summernote" placeholder="">{{ $product->description }}</textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="description">Shipping and Returns</label>
-                                            <textarea name="shipping_returns" id="shipping_returns" cols="30" rows="10" class="summernote"
-                                                placeholder="">{{ $product->shipping_returns }}</textarea>
+                                            <textarea name="shipping_returns" id="shipping_returns" cols="30" rows="10" class="summernote" placeholder="">{{ $product->shipping_returns }}</textarea>
                                         </div>
                                     </div>
 
@@ -80,17 +78,19 @@
                         </div>
                         <div class="row" id="product-gallery">
                             @if ($productImages->isNotEmpty())
-                            @foreach ($productImages as $image)
-                            <div class="col-md-3" id="image-row-{{$image->id}}">
-                                <input type="hidden" name="image_array[]" value="{{$image->id}}">
-                                <div class="card">
-                                    <img src="{{asset('uploads/product/small/'.$image->image)}}" class="card-img-top" alt="">
-                                    <div class="card-body">
-                                        <a href="javascript:void(0)" onclick="deleteImage({{$image->id}})" class="btn btn-danger delete-image">Delete</a>
+                                @foreach ($productImages as $image)
+                                    <div class="col-md-3" id="image-row-{{ $image->id }}">
+                                        <input type="hidden" name="image_array[]" value="{{ $image->id }}">
+                                        <div class="card">
+                                            <img src="{{ asset('uploads/product/small/' . $image->image) }}"
+                                                class="card-img-top" alt="">
+                                            <div class="card-body">
+                                                <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})"
+                                                    class="btn btn-danger delete-image">Delete</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            @endforeach
+                                @endforeach
                             @endif
                         </div>
                         <div class="card mb-3">
@@ -159,6 +159,24 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Related products</h2>
+                                <div class="mb-3">
+                                    <select multiple class= "related-product w-100" name = "related_products[]"
+                                        id = "related_products">
+                                        @if (!empty($relatedProducts))
+                                            @foreach ($relatedProducts as $relProduct)
+                                                <option selected value="{{ $relProduct->id }}">{{ $relProduct->name }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <p class = "error"></p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-3">
@@ -213,8 +231,8 @@
                                         <option value="">Select a Brand</option>
                                         @if ($brands->isNotEmpty())
                                             @foreach ($brands as $brand)
-                                            <option {{ $product->brand_id == $brand->id ? 'selected' : '' }}
-                                                value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                                <option {{ $product->brand_id == $brand->id ? 'selected' : '' }}
+                                                    value="{{ $brand->id }}">{{ $brand->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -226,13 +244,16 @@
                                 <h2 class="h4 mb-3">Featured product</h2>
                                 <div class="mb-3">
                                     <select name="is_featured" id="is_featured" class="form-control">
-                                        <option {{ $product->is_featured == 'No' ? 'selected' : '' }} value="No">No</option>
-                                        <option {{ $product->is_featured == 'Yes' ? 'selected' : '' }} value="Yes">Yes</option>
+                                        <option {{ $product->is_featured == 'No' ? 'selected' : '' }} value="No">No
+                                        </option>
+                                        <option {{ $product->is_featured == 'Yes' ? 'selected' : '' }} value="Yes">Yes
+                                        </option>
                                     </select>
                                     <p class = "error"></p>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="pb-5 pt-3">
@@ -248,6 +269,21 @@
 
 @section('customJS')
     <script>
+        $('.related-product').select2({
+            ajax: {
+                url: '{{ route('products.getProducts') }}',
+                dataType: 'json',
+                tags: true,
+                multiple: true,
+                minimumInputLength: 3,
+                processResults: function(data) {
+                    return {
+                        results: data.tags
+                    };
+                }
+            }
+        });
+
         $("#name").change(function() {
             element = $(this);
             $("button[type=submit]").prop("disabled", true)
@@ -275,7 +311,7 @@
             $('button[type="submit"]').prop("disabled", true);
 
             $.ajax({
-                url: '{{ route('products.update',$product->id) }}',
+                url: '{{ route('products.update', $product->id) }}',
                 type: 'put',
                 data: formArray,
                 dataType: 'json',
@@ -341,7 +377,9 @@
             url: "{{ route('product-images.update') }}",
             maxFiles: 10,
             paramName: 'image',
-            params: {'product_id' : '{{$product->id}}'},
+            params: {
+                'product_id': '{{ $product->id }}'
+            },
             addRemoveLinks: true,
             acceptedFiles: "image/jpeg,image/png,image/gif",
             headers: {
@@ -368,20 +406,22 @@
 
         function deleteImage(id) {
             $("#image-row-" + id).remove();
-            if(confirm("Are you sure you want to delete the image?")){
+            if (confirm("Are you sure you want to delete the image?")) {
                 $.ajax({
-                url: '{{route('product-images.destroy')}}',
-                type: 'delete',
-                data:{id:id},
-                success:function(response){
-                    if (response.status == true){
-                        alert(response.message);
-                    }else{
-                        alert(response.message);
-                    }
+                    url: '{{ route('product-images.destroy') }}',
+                    type: 'delete',
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        if (response.status == true) {
+                            alert(response.message);
+                        } else {
+                            alert(response.message);
+                        }
 
-                }
-            });
+                    }
+                });
             }
         }
     </script>
