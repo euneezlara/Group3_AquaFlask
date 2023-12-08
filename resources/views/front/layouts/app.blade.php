@@ -37,6 +37,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick-theme.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/ion.rangeSlider.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin-assets/css/datetimepicker.css') }}">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,7 +65,12 @@
 
                 </div>
                 <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
-                    <a href="account.php" class="nav-link text-dark">My Account</a>
+                    @if (Auth::check())
+                    <a href="{{route('account.profile')}}" class="nav-link text-dark">My Account</a>  
+                    @else
+                    <a href="{{route('account.login')}}" class="nav-link text-dark">Login/Register</a>
+                    @endif
+                
                     <form action="">
                         <div class="input-group">
                             <input type="text" placeholder="Search For Products" class="form-control"
@@ -220,7 +226,7 @@
                 <div class="row">
                     <div class="col-12 mt-3">
                         <div class="copy-right text-center">
-                            <p>© Copyright 2022 Amazing Shop. All Rights Reserved</p>
+                            <p>Copyright &copy; 2023 Group 3 - 4ITD AquaFlask All rights reserved.</p>
                         </div>
                     </div>
                 </div>
@@ -234,6 +240,7 @@
     <script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/custom.js') }}"></script>
+    <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script>
     <script>
         window.onscroll = function() {
             myFunction()

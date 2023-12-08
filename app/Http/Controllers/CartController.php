@@ -8,6 +8,7 @@ use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\ShippingCharge;
 use Auth;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -142,37 +143,99 @@ class CartController extends Controller
         ]);
     }
 
+    // public function checkout()
+    // {
+
+    //     //empty cart
+    //     if (Cart::count() == 0) {
+    //         return redirect()->route('front.cart');
+    //     }
+
+    //     //user not logged in
+    //     if (Auth::check() == false) {
+    //         if (!session()->has('url.intended')) {
+    //             session(['url.intended' => url()->current()]);
+
+    //         }
+
+    //         return redirect()->route('account.login');
+    //     }
+
+    //     $customerAddress = CustomerAddress::where('user_id', Auth::user()->id)->first();
+
+    //     session()->forget('url.intended');
+
+    //     $countries = Country::orderBy('name', 'ASC')->get();
+
+    //     // Calculate Shipping
+    //     $userCountry = $customerAddress->country_id;
+    //     $shippingInfo = ShippingCharge::where('country_id', $userCountry)->first();
+
+    //     $totalQty = 0;
+    //     $totalShippingCharge = 0;
+    //     $grandTotal = 0;
+    //     foreach (Cart::content() as $item) {
+    //         $totalQty += $item->qty;
+    //     }
+
+    //     $totalShippingCharge = $shippingInfo->amount;
+
+    //     $grandTotal = Cart::subtotal(2, '.', '') + $totalShippingCharge;
+
+
+    //     return view('front.checkout', [
+    //         'countries' => $countries,
+    //         'customerAddress' => $customerAddress,
+    //         'totalShippingCharge' => $totalShippingCharge,
+    //         'grandTotal' => $grandTotal
+    //     ]);
+
+
+    // }
+
     public function checkout()
-    {
-
-        //empty cart
-        if (Cart::count() == 0) {
-            return redirect()->route('front.cart');
-        }
-
-        //user not logged in
-        if (Auth::check() == false) {
-            if (!session()->has('url.intended')) {
-                session(['url.intended' => url()->current()]);
-
-            }
-
-            return redirect()->route('account.login');
-        }
-
-        $customerAddress = CustomerAddress::where('user_id',Auth::user()->id)->first();
-
-        session()->forget('url.intended');
-
-        $countries = Country::orderBy('name', 'ASC')->get();
-
-        return view('front.checkout', [
-            'countries' => $countries,
-            'customerAddress' => $customerAddress
-        ]);
-
-
+{
+    // Empty cart
+    if (Cart::count() == 0) {
+        return redirect()->route('front.cart');
     }
+
+    // User not logged in
+    if (Auth::check() == false) {
+        return redirect()->route('account.login')->with('redirected_from_checkout', true);
+    }
+
+    // Fetch customer address
+    $customerAddress = CustomerAddress::where('user_id', Auth::user()->id)->first();
+
+    // Forget intended URL for redirect
+    session()->forget('url.intended');
+
+    $countries = Country::orderBy('name', 'ASC')->get();
+    $totalShippingCharge = 0;
+    $grandTotal = 0;
+
+    // Calculate Shipping
+    if ($customerAddress !== null) {
+        $userCountry = $customerAddress->country_id;
+        $shippingInfo = ShippingCharge::where('country_id', $userCountry)->first();
+
+        if ($shippingInfo !== null) {
+            $totalShippingCharge = $shippingInfo->amount;
+        }
+
+        // Calculate grand total
+        $grandTotal = Cart::subtotal(2, '.', '') + $totalShippingCharge;
+    }
+
+    return view('front.checkout', [
+        'countries' => $countries,
+        'customerAddress' => $customerAddress,
+        'totalShippingCharge' => $totalShippingCharge,
+        'grandTotal' => $grandTotal
+    ]);
+}
+
 
     public function processCheckout(Request $request)
     {
@@ -216,22 +279,110 @@ class CartController extends Controller
                 'city' => $request->city,
                 'province' => $request->province,
                 'zip' => $request->zip,
-               
+
             ]
         );
 
         // storing data in orders table
-        if($request->payment_method == 'cod'){
-            $shipping = 0;
-            $subTotal = Cart::subtotal(2,'.','');
-            $grandTotal = $subTotal+$shipping;
+        // if ($request->payment_method == 'cod') {
+        //     $shipping = 0;
+        //     $subTotal = Cart::subtotal(2, '.', '');
+        //     $grandTotal = $subTotal + $shipping;
+            
+        //     $shippingInfo = ShippingCharge::where('country_id', $request->country)->first();
 
+        //     $totalQty = 0;
+        //     foreach (Cart::content() as $item) {
+        //         $totalQty += $item->qty;
+        //     }
+
+
+        //     if ($shippingInfo != null) {
+        //         $shipping = $shippingInfo->amount;
+
+        //         $grandTotal = $subTotal + $shipping;
+
+
+        //     } else {
+        //         $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
+        //         $shipping = $shippingInfo->amount;
+        //         $grandTotal = $subTotal + $shipping;
+
+
+        //     }
+        //     $shipping = 0;
+        //     $subTotal = Cart::subtotal(2, '.', '');
+        //     $grandTotal = $subTotal + $shipping;
+
+        //     $order = new Order;
+        //     $order->subtotal = $subTotal;
+        //     $order->shipping = $shipping;
+        //     $order->grand_total = $grandTotal;
+        //     $order->user_id = $user->id;
+        //     $order->payment_status = 'not paid';
+        //     $order->status = 'pending';
+        //     $order->first_name = $request->first_name;
+        //     $order->last_name = $request->last_name;
+        //     $order->email = $request->email;
+        //     $order->mobile = $request->mobile;
+        //     $order->address = $request->address;
+        //     $order->apartment = $request->apartment;
+        //     $order->province = $request->province;
+        //     $order->city = $request->city;
+        //     $order->zip = $request->zip;
+        //     $order->notes = $request->notes;
+        //     $order->country_id = $request->country;
+        //     $order->save();
+
+        //     // storing order items in order items table
+        //     foreach (Cart::content() as $item) {
+        //         $orderItem = new OrderItem;
+        //         $orderItem->product_id = $item->id;
+        //         $orderItem->order_id = $order->id;
+        //         $orderItem->name = $item->name;
+        //         $orderItem->qty = $item->qty;
+        //         $orderItem->price = $item->price;
+        //         $orderItem->total = $item->price * $item->qty;
+        //         $orderItem->save();
+        //     }
+
+        //     session()->flash('success', 'You have successfully placed your order');
+
+        //     Cart::destroy();
+
+        //     return response()->json([
+        //         'message' => 'Order saved successfully',
+        //         'orderId' => $order->id,
+        //         'status' => true
+        //     ]);
+
+        // } else {
+
+        // }
+        if ($request->payment_method == 'cod') {
+            $subTotal = Cart::subtotal(2, '.', '');
+        
+            // Fetch shipping charge based on country
+            $shippingInfo = ShippingCharge::where('country_id', $request->country)->first();
+        
+            if ($shippingInfo !== null) {
+                $shipping = $shippingInfo->amount;
+            } else {
+                // If shipping charge for the country is not found, use a default value or handle it accordingly
+                $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
+                $shipping = $shippingInfo ? $shippingInfo->amount : 0; // Use 0 if not found
+            }
+        
+            $grandTotal = $subTotal + $shipping;
+        
+            // Create and save the order
             $order = new Order;
             $order->subtotal = $subTotal;
             $order->shipping = $shipping;
             $order->grand_total = $grandTotal;
             $order->user_id = $user->id;
-
+            $order->payment_status = 'not paid';
+            $order->status = 'pending';
             $order->first_name = $request->first_name;
             $order->last_name = $request->last_name;
             $order->email = $request->email;
@@ -244,41 +395,87 @@ class CartController extends Controller
             $order->notes = $request->notes;
             $order->country_id = $request->country;
             $order->save();
-
-            // storing order items in order items table
-            foreach (Cart::content() as $item){
+        
+        
+            // Save order items
+            foreach (Cart::content() as $item) {
                 $orderItem = new OrderItem;
-                $orderItem -> product_id = $item->id;
-                $orderItem -> order_id = $order->id;
-                $orderItem -> name = $item->name;
-                $orderItem -> qty = $item->qty;
-                $orderItem -> price = $item->price;
-                $orderItem -> total = $item->price*$item->qty;
-                $orderItem -> save();
+                $orderItem->product_id = $item->id;
+                $orderItem->order_id = $order->id;
+                $orderItem->name = $item->name;
+                $orderItem->qty = $item->qty;
+                $orderItem->price = $item->price;
+                $orderItem->total = $item->price * $item->qty;
+                $orderItem->save();
+
             }
-
-            session()->flash('success','You have successfully placed your order');
-
+        
+            // Flash success message and clear cart
+            session()->flash('success', 'You have successfully placed your order');
             Cart::destroy();
-
+        
             return response()->json([
                 'message' => 'Order saved successfully',
                 'orderId' => $order->id,
                 'status' => true
             ]);
-
-        }else{
-
+        } else {
+            // Handle other payment methods or cases here if needed
         }
         
 
+
     }
 
-    public function thankyou($id){
-        return view ('front.thanks',[
+    public function thankyou($id)
+    {
+        return view('front.thanks', [
             'id' => $id
         ]);
     }
 
+    public function getOrderSummary(Request $request){
+        if ($request->country_id > 0) {
+            $subTotal = Cart::subtotal(2, '.', '');
 
+            $shippingInfo = ShippingCharge::where('country_id', $request->country_id)->first();
+
+            $totalQty = 0;
+            foreach (Cart::content() as $item) {
+                $totalQty += $item->qty;
+            }
+
+            if ($shippingInfo != null) {
+                $shippingCharge = $shippingInfo->amount;
+
+                $grandTotal = $subTotal + $shippingCharge;
+
+                return response()->json([
+                    'status' => true,
+                    'grandTotal' => number_format($grandTotal, 2),
+                    'shippingCharge' => number_format($shippingCharge, 2),
+                ]);
+
+            } else {
+                $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
+                $shippingCharge = $shippingInfo->amount;
+                $grandTotal = $subTotal + $shippingCharge;
+
+                return response()->json([
+                    'status' => true,
+                    'grandTotal' => number_format($grandTotal, 2),
+                    'shippingCharge' => number_format($shippingCharge, 2),
+                ]);
+
+            }
+
+        } else {
+            // $grandTotal = 0;
+            return response()->json([
+                'status' => true,
+                'grandTotal' => number_format($grandTotal, 2),
+                'shippingCharge' => number_format(0, 2),
+            ]);
+        }
+    }
 }

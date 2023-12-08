@@ -5,9 +5,11 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
@@ -43,18 +45,15 @@ Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.
 //Checkout
 Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
 Route::post('/process-checkout', [CartController::class, 'processCheckout'])->name('front.processCheckout');
-
 Route::get('/thanks/{orderId}', [CartController::class, 'thankyou'])->name('front.thankyou');
-
-
-
-
+Route::post('/get-order-summary', [CartController::class, 'getOrderSummary'])->name('front.getOrderSummary');
 
 Route::group(['prefix' => 'account'], function () {
     Route::group(['middleware' => 'guest'], function () {
         //Login
         Route::get('/login', [AuthController::class, 'login'])->name('account.login');
         Route::post('/login', [AuthController::class, 'authenticate'])->name('account.authenticate');
+        
         //Register
         Route::get('/register', [AuthController::class, 'register'])->name('account.register');
         Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
@@ -62,6 +61,8 @@ Route::group(['prefix' => 'account'], function () {
     });
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/profile', [AuthController::class, 'profile'])->name('account.profile');
+        Route::get('/my-orders', [AuthController::class, 'orders'])->name('account.order');
+        Route::get('/order-detail/{orderId}', [AuthController::class, 'orderDetail'])->name('account.orderDetail');
          //Logout
          Route::get('/logout', [AuthController::class, 'logout'])->name('account.logout');
         
@@ -126,7 +127,19 @@ Route::group(['prefix' => 'admin'], function () {
         //temp-images.create
         Route::post('/upload-temp-image', [TempImagesController::class, 'create'])->name('temp-images.create');
 
+        //Shipping Routes
+        Route::get('/shipping/create', [ShippingController::class, 'create'])->name('shipping.create');
+        Route::post('/shipping', [ShippingController::class, 'store'])->name('shipping.store');
+        Route::get('/shipping/{id}', [ShippingController::class, 'edit'])->name('shipping.edit');
+        Route::put('/shipping/{id}', [ShippingController::class, 'update'])->name('shipping.update');
+        Route::delete('/shipping/{id}', [ShippingController::class, 'destroy'])->name('shipping.delete');
 
+        //Order Routes
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{id}', [OrderController::class, 'detail'])->name('orders.detail');
+        Route::post('/order/change-status/{id}', [OrderController::class, 'changeOrderStatus'])->name('orders.changeOrderStatus');
+        
+        
 
 
         Route::get('/getSlug', function (Request $request) {
