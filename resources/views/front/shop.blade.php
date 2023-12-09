@@ -5,7 +5,7 @@
         <div class="container">
             <div class="light-font">
                 <ol class="breadcrumb primary-color mb-0">
-                    <li class="breadcrumb-item"><a class="white-text" href="{{route('front.home')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a class="white-text" href="{{ route('front.home') }}">Home</a></li>
                     <li class="breadcrumb-item active">Shop</li>
                 </ol>
             </div>
@@ -140,7 +140,8 @@
                                             <div class="card product-card">
                                                 <div class="product-image position-relative">
 
-                                                    <a href="{{ route('front.product', $product->slug) }}" class="product-img">
+                                                    <a href="{{ route('front.product', $product->slug) }}"
+                                                        class="product-img">
                                                         @if (!empty($productImage->image))
                                                             <img class="card-img-top"
                                                                 src="{{ asset('uploads/product/small/' . $productImage->image) }}" />
@@ -150,12 +151,28 @@
                                                         @endif
                                                     </a>
 
-                                                    <a onclick="addToWishlist({{$product->id}})" class="whishlist" href="javascript:void(0);"><i class="far fa-heart"></i></a>
+                                                    <a onclick="addToWishlist({{ $product->id }})" class="whishlist"
+                                                        href="javascript:void(0);"><i class="far fa-heart"></i></a>
 
                                                     <div class="product-action">
-                                                        <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }});">
-                                                            <i class="fa fa-shopping-cart"></i> Add To Cart
-                                                        </a>
+                                                        @if ($product->track_qty == 'Yes')
+                                                            @if ($product->qty > 0)
+                                                                <a class="btn btn-dark" href="javascript:void(0);"
+                                                                    onclick="addToCart({{ $product->id }});">
+                                                                    <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                                </a>
+                                                            @else
+                                                                <a class="btn btn-dark" href="javascript:void(0);">
+                                                                    Out of Stock
+                                                                </a>
+                                                            @endif
+                                                        @else
+                                                            <a class="btn btn-dark" href="javascript:void(0);"
+                                                                onclick="addToCart({{ $product->id }});">
+                                                                <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                            </a>
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                                 <div class="card-body text-center mt-3">
@@ -177,7 +194,7 @@
 
 
                             <div class="col-md-12 pt-5">
-                                {{$products->withQueryString()->links()}}
+                                {{ $products->withQueryString()->links() }}
                                 {{-- <nav aria-label="Page navigation example">
                                     <ul class="pagination justify-content-end">
                                         <li class="page-item disabled">
@@ -248,6 +265,11 @@
 
 
             //Sorting Filter
+            var keyword = $("#search").val();
+
+            if (keyword.length > 0) {
+                url += '&search=' + keyword;
+            }
 
             url += '&sort=' + $("#sort").val()
             window.location.href = url;

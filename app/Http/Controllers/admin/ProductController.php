@@ -34,7 +34,7 @@ class ProductController extends Controller
     {
         $data = [];
         $categories = Category::orderBy("name", "ASC")->get();
-        $brands = Brand::orderBy("name", "ASC")->get();
+        $brands = Brand::orderBy("size", "ASC")->get();
         $data["categories"] = $categories;
         $data["brands"] = $brands;
         return view("admin/products/create", $data);
@@ -163,7 +163,7 @@ class ProductController extends Controller
         }
 
         $categories = Category::orderBy("name", "ASC")->get();
-        $brands = Brand::orderBy("name", "ASC")->get();
+        $brands = Brand::orderBy("size", "ASC")->get();
 
         $data = [
             'product' => $product,
