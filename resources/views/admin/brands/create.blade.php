@@ -5,7 +5,7 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create Brand</h1>
+                <h1>Create Size</h1>
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('brands.index') }}" class="btn btn-primary">Back</a>
@@ -24,8 +24,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="name">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" placeholder="Name">	
+                            <label for="name">Size</label>
+                            <input type="text" name="size" id="size" class="form-control" placeholder="Size">	
                             <p></p>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
 
                         window.location.href = "{{ route('brands.index') }}";
 
-                        $("#name").removeClass("is-invalid")
+                        $("#size").removeClass("is-invalid")
                             .siblings("p").removeClass("invalid-feedback")
                             .html("");
 
@@ -89,12 +89,12 @@
 
                     } else {
                         var errors = response["errors"]
-                        if (errors['name']) {
-                            $("#name").addClass("is-invalid")
+                        if (errors['size']) {
+                            $("#size").addClass("is-invalid")
                                 .siblings("p").addClass("invalid-feedback")
-                                .html(errors['name']);
+                                .html(errors['size']);
                         } else {
-                            $("#name").removeClass("is-invalid")
+                            $("#size").removeClass("is-invalid")
                                 .siblings("p").removeClass("invalid-feedback")
                                 .html("");
                         }
@@ -120,7 +120,7 @@
             })
         });
 
-        $("#name").change(function() {
+        $("#size").change(function() {
             element = $(this);
             $("button[type=submit]").prop("disabled", true)
             $.ajax({

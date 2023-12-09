@@ -5,7 +5,7 @@
         <div class="container">
             <div class="light-font">
                 <ol class="breadcrumb primary-color mb-0">
-                    <li class="breadcrumb-item"><a class="white-text" href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a class="white-text" href="{{route('front.home')}}">Home</a></li>
                     <li class="breadcrumb-item active">Shop</li>
                 </ol>
             </div>
@@ -80,7 +80,7 @@
                                             class="form-check-input brand-label" type="checkbox" name="brand[]"
                                             value="{{ $brand->id }}" id="brand-{{ $brand->id }}">
                                         <label class="form-check-label" for="brand-{{ $brand->id }}">
-                                            {{ $brand->name }}
+                                            {{ $brand->size }}
                                         </label>
                                     </div>
                                 @endforeach
@@ -150,7 +150,7 @@
                                                         @endif
                                                     </a>
 
-                                                    <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                                    <a onclick="addToWishlist({{$product->id}})" class="whishlist" href="javascript:void(0);"><i class="far fa-heart"></i></a>
 
                                                     <div class="product-action">
                                                         <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }});">

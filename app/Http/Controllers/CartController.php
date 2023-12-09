@@ -202,7 +202,9 @@ class CartController extends Controller
 
     // User not logged in
     if (Auth::check() == false) {
+        session(['url.intended' => url()->previous()]);
         return redirect()->route('account.login')->with('redirected_from_checkout', true);
+        
     }
 
     // Fetch customer address

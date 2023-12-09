@@ -14,7 +14,7 @@ class BrandController extends Controller
     $brands = Brand::latest("id");
 
     if (!empty($request->get("keyword"))) {
-        $brands = $brands->where("name", "like", "%" . $request->get("keyword") . "%");
+        $brands = $brands->where("size", "like", "%" . $request->get("keyword") . "%");
     }
 
     $brands = $brands->paginate(10);
@@ -29,13 +29,13 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "name" => "required",
+            "size" => "required",
             "slug" => "required|unique:brands",
             'status' => 'required',
         ]);
         if ($validator->passes()) {
             $brand = new Brand();
-            $brand->name = $request->name;
+            $brand->size = $request->size;
             $brand->slug = $request->slug;
             $brand->status = $request->status;
             $brand->save();
@@ -84,12 +84,12 @@ class BrandController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            "name" => "required",
+            "size" => "required",
             "slug" => "required|unique:brands,slug," . $brand->id . ",id",
             'status' => 'required',
         ]);
         if ($validator->passes()) {
-            $brand->name = $request->name;
+            $brand->size = $request->size;
             $brand->slug = $request->slug;
             $brand->status = $request->status;
             $brand->save();

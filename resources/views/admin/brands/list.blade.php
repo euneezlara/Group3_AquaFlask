@@ -6,10 +6,10 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Brands</h1>
+                    <h1>Sizes</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('brands.create') }}" class="btn btn-primary">New Brand</a>
+                    <a href="{{ route('brands.create') }}" class="btn btn-primary">New Size</a>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                         <thead>
                             <tr>
                                 <th width="60">ID</th>
-                                <th>Name</th>
+                                <th>Size</th>
                                 <th>Slug</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
@@ -53,7 +53,7 @@
                                 @foreach ($brands as $brand)
                                     <tr>
                                         <td>{{ $brand->id }}</td>
-                                        <td>{{ $brand->name }}</td>
+                                        <td>{{ $brand->size }}</td>
                                         <td>{{ $brand->slug }}</td>
                                         <td>
                                             @if ($brand->status == 1)

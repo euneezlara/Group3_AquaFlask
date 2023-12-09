@@ -191,13 +191,13 @@
                         </div>
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h2 class="h4 mb-3">Product brand</h2>
+                                <h2 class="h4 mb-3">Product Size</h2>
                                 <div class="mb-3">
                                     <select name="brand" id="brand" class="form-control">
-                                        <option value="">Select a Brand</option>
+                                        <option value="">Select a Size</option>
                                         @if ($brands->isNotEmpty())
                                             @foreach ($brands as $brand)
-                                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                                <option value="{{ $brand->id }}">{{ $brand->size }}</option>
                                             @endforeach
                                         @endif
                                     </select>
