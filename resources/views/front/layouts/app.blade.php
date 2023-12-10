@@ -58,7 +58,7 @@
         <div class="container">
             <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
                 <div class="col-lg-4 logo">
-                    <a href="#" class="text-decoration-none">
+                    <a href="{{ route('front.home') }}" class="text-decoration-none">
                         <img src="{{ asset('front-assets/images/logo.png') }}" alt="AquaFlask SHOP"
                             style="max-width: 200px; height: auto;">
                     </a>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
                     @if (Auth::check())
-                    <a href="{{route('account.profile')}}" class="nav-link text-dark">My Account</a>  
+                    <a href="{{ route('account.profile') }}" class="nav-link text-dark">Hi, {{ Auth::user()->name }}!</a>
                     @else
                     <a href="{{route('account.login')}}" class="nav-link text-dark">Login/Register</a>
                     @endif
@@ -90,8 +90,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-xl" id="navbar">
                 <a href="{{ route('front.home') }}" class="text-decoration-none mobile-logo">
-                    <span class="h2 text-uppercase text-primary bg-dark">Online</span>
-                    <span class="h2 text-uppercase text-white px-2">SHOP</span>
+                    <span class="h2 text-uppercase text-primary bg-dark">AquaFlask</span>
                 </a>
                 <button class="navbar-toggler menu-btn" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -156,7 +155,7 @@
 
                 <div class="col-md-4">
                     <div class="footer-card">
-                        <h3>Important Links</h3>
+                        <h3>About Us</h3>
                         <ul>
                             <li><a href="about-us.php" title="About">About</a></li>
                             <li><a href="contact-us.php" title="Contact Us">Contact Us</a></li>
@@ -171,9 +170,10 @@
                     <div class="footer-card">
                         <h3>My Account</h3>
                         <ul>
-                            <li><a href="#" title="Sell">Login</a></li>
-                            <li><a href="#" title="Advertise">Register</a></li>
-                            <li><a href="#" title="Contact Us">My Orders</a></li>
+                            <li><a href="{{route('account.profile')}}" title="Sell">Profile</a></li>
+                            <li><a href="{{route('account.order')}}" title="Advertise">Orders</a></li>
+                            <li><a href="{{route('account.wishlist')}}" title="Contact Us">Wishlist</a></li>
+                            <li><a href="{{route('front.home')}}" title="Contact Us">Home</a></li>
                         </ul>
                     </div>
                 </div>

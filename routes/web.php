@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
+use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\admin\ShippingController;
@@ -70,6 +71,11 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/profile', [AuthController::class, 'profile'])->name('account.profile');
         Route::post('/update-profile', [AuthController::class, 'updateProfile'])->name('account.updateProfile');
         Route::post('/update-address', [AuthController::class, 'updateAddress'])->name('account.updateAddress');
+
+        //Change Password
+        Route::get('/change-password', [AuthController::class, 'showChangePasswordForm'])->name('account.changePassword');
+        Route::post('/process-change-password', [AuthController::class, 'changePassword'])->name('account.processChangePassword');
+
         Route::get('/my-orders', [AuthController::class, 'orders'])->name('account.order');
         Route::get('/my-wishlist', [AuthController::class, 'wishlist'])->name('account.wishlist');
         Route::post('/remove-product-from-wishlist', [AuthController::class, 'removeProductFromWishlist'])->name('account.removeProductFromWishlist');
@@ -149,6 +155,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{id}', [OrderController::class, 'detail'])->name('orders.detail');
         Route::post('/order/change-status/{id}', [OrderController::class, 'changeOrderStatus'])->name('orders.changeOrderStatus');
+
+        //settings route
+        Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
+        Route::post('/process-change-password', [SettingController::class, 'changePassword'])->name('admin.processChangePassword');
+
         
         
 
