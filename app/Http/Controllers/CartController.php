@@ -193,8 +193,7 @@ class CartController extends Controller
 
     // }
 
-    public function checkout()
-    {
+    public function checkout(){
         // Empty cart
         if (Cart::count() == 0) {
             return redirect()->route('front.cart');
