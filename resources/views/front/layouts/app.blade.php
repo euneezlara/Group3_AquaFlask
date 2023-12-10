@@ -66,20 +66,22 @@
                 </div>
                 <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
                     @if (Auth::check())
-                    <a href="{{ route('account.profile') }}" class="nav-link text-dark">Hi, {{ Auth::user()->name }}!</a>
+                        <a href="{{ route('account.profile') }}" class="nav-link text-dark">Hi,
+                            {{ Auth::user()->name }}!</a>
                     @else
-                    <a href="{{route('account.login')}}" class="nav-link text-dark">Login/Register</a>
+                        <a href="{{ route('account.login') }}" class="nav-link text-dark">Login/Register</a>
                     @endif
-                
+
                     <form action="{{ route('front.shop') }}" method="get">
                         <div class="input-group">
-                            <input value="{{ Request::get('search') }}" type="text" placeholder="Search For Products" class="form-control" name="search" id="search">
+                            <input value="{{ Request::get('search') }}" type="text"
+                                placeholder="Search For Products" class="form-control" name="search" id="search">
                             <button type="submit" class="input-group-text">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
                     </form>
-                    
+
 
                 </div>
             </div>
@@ -103,6 +105,16 @@
                         <!-- <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="index.php" title="Products">Home</a>
         </li> -->
+                        <li class="nav-item dropdown">
+                            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">Menu</button>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li><a class="dropdown-item nav-link" href="{{ route('front.home') }}">Home</a></li>
+                                <li><a class="dropdown-item nav-link" href="{{ route('front.shop') }}">Products</a></li>
+                                <li><a class="dropdown-item nav-link" href="{{ route('front.cart') }}">Cart</a></li>
+                                <li><a class="dropdown-item nav-link" href="{{ route('account.profile') }}">Profile</a></li>
+                            </ul>
+                        </li>
 
                         @if (getCategories()->isNotEmpty())
                             @foreach (getCategories() as $category)
@@ -124,9 +136,10 @@
                                 </li>
                             @endforeach
                         @endif
-
                     </ul>
                 </div>
+
+
                 <div class="right-nav py-0">
                     <a href="{{ route('front.cart') }}" class="ml-3 d-flex pt-2">
                         <i class="fas fa-shopping-cart text-primary"></i>
@@ -170,10 +183,10 @@
                     <div class="footer-card">
                         <h3>My Account</h3>
                         <ul>
-                            <li><a href="{{route('account.profile')}}" title="Sell">Profile</a></li>
-                            <li><a href="{{route('account.order')}}" title="Advertise">Orders</a></li>
-                            <li><a href="{{route('account.wishlist')}}" title="Contact Us">Wishlist</a></li>
-                            <li><a href="{{route('front.home')}}" title="Contact Us">Home</a></li>
+                            <li><a href="{{ route('account.profile') }}" title="Sell">Profile</a></li>
+                            <li><a href="{{ route('account.order') }}" title="Advertise">Orders</a></li>
+                            <li><a href="{{ route('account.wishlist') }}" title="Contact Us">Wishlist</a></li>
+                            <li><a href="{{ route('front.home') }}" title="Contact Us">Home</a></li>
                         </ul>
                     </div>
                 </div>
@@ -192,22 +205,23 @@
         </div>
     </footer>
     <!-- Wishlist Modal -->
-<div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Success</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Success</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
 
     <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
@@ -241,15 +255,17 @@
 
         function addToCart(id) {
             $.ajax({
-                url:'{{route("front.addToCart")}}',
-                type:'post',
-                data:{id:id},
+                url: '{{ route('front.addToCart') }}',
+                type: 'post',
+                data: {
+                    id: id
+                },
                 dataType: 'json',
-                success: function(response){
-                    if (response.status == true){
-                        window.location.href = "{{route('front.cart')}}";
-                    }else{
-                        alert (response.message);
+                success: function(response) {
+                    if (response.status == true) {
+                        window.location.href = "{{ route('front.cart') }}";
+                    } else {
+                        alert(response.message);
                     }
                 }
 
@@ -258,24 +274,25 @@
 
         function addToWishlist(id) {
             $.ajax({
-                url:'{{route("front.addToWishlist")}}',
-                type:'post',
-                data:{id:id},
+                url: '{{ route('front.addToWishlist') }}',
+                type: 'post',
+                data: {
+                    id: id
+                },
                 dataType: 'json',
-                success: function(response){
-                    if (response.status == true){
+                success: function(response) {
+                    if (response.status == true) {
                         $("#wishlistModal .modal-body").html(response.message);
                         $("#wishlistModal").modal('show');
-                        
-                    }else{
-                        window.location.href = "{{route('account.login')}}";
+
+                    } else {
+                        window.location.href = "{{ route('account.login') }}";
                         // alert (response.message);
                     }
                 }
 
             });
         }
-        
     </script>
     @yield ('customJs')
 </body>

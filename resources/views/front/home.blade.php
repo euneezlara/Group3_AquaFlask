@@ -1,8 +1,7 @@
 @extends('front\layouts\app')
 @section('content')
     <section class="section-1">
-        <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel"
-            data-bs-interval="false">
+        <div id="carouselExampleIndicators" class="carousel slide carousel-slide" data-bs-ride="carousel" data-bs-interval="5000">
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
