@@ -125,7 +125,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <textarea name="order_notes" id="order_notes" cols="30" rows="2" placeholder="Order Notes (optional)"
-                                                class="form-control"></textarea>
+                                                class="form-control" ></textarea>
                                         </div>
                                     </div>
 

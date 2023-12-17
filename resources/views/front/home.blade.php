@@ -129,7 +129,7 @@
                 <div class="col-lg-3">
                     <div class="box shadow-lg">
                         <div class="fa icon fa-exchange-alt text-primary m-0 mr-3"></div>
-                        <h2 class="font-weight-semi-bold m-0">14-Day Return</h2>
+                        <h2 class="font-weight-semi-bold m-0">30-Day Return</h2>
                     </div>
                 </div>
                 <div class="col-lg-3 ">

@@ -78,7 +78,7 @@
                                     <img src="{{asset('admin-assets/img/default-150x150.png')}}" class="img-thumbnail" width="50" />
                                 @endif
                                 </td>
-                                <td><a href="#">{{$product->name}}</a></td>
+                                <td>{{$product->name}}</a></td>
                                 <td>{{$product->price}}</td>
                                 <td>{{$product->qty}} left in Stock</td>
                                 <td>{{$product->sku}}</td>											

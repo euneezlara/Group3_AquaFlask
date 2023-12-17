@@ -138,7 +138,7 @@
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <span>Shipping</span>
-                                    <span class="ms-auto">₱{{ number_format($order->shupping, 2) }}</span>
+                                    <span class="ms-auto">₱{{ number_format($order->shipping, 2) }}</span>
                                 </li>
                                 <li class="list-group-item d-flex fs-lg fw-bold">
                                     <span>Grand Total</span>

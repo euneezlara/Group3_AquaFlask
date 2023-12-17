@@ -156,30 +156,26 @@
     <footer class="bg-dark mt-5">
         <div class="container pb-5 pt-3">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="footer-card">
                         <h3>Get In Touch</h3>
-                        <p>No dolore ipsum accusam no lorem. <br>
-                            123 Street, New York, USA <br>
-                            exampl@example.com <br>
-                            000 000 0000</p>
+                        <p>Espana Blvd., Sampaloc, Manila, Philippines 1008<br>
+                            aquaflask@example.com <br>
+                            +63-894-5739-7374 </p>
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="footer-card">
                         <h3>About Us</h3>
                         <ul>
-                            <li><a href="about-us.php" title="About">About</a></li>
-                            <li><a href="contact-us.php" title="Contact Us">Contact Us</a></li>
-                            <li><a href="#" title="Privacy">Privacy</a></li>
-                            <li><a href="#" title="Privacy">Terms & Conditions</a></li>
-                            <li><a href="#" title="Privacy">Refund Policy</a></li>
+                            <p>
+                                At AquaFlask, we sell stainless steel insulated water bottles that keep beverages hot or cold for up to 24 hours. Our mission is to provide affordable, convenient, and effective insulated beverage containers for everyday use.</p>
                         </ul>
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div class="footer-card">
                         <h3>My Account</h3>
                         <ul>
@@ -189,7 +185,7 @@
                             <li><a href="{{ route('front.home') }}" title="Contact Us">Home</a></li>
                         </ul>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="copyright-area">

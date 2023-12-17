@@ -64,7 +64,9 @@
                                                     class="fas fa-trash-alt me-2"></i>Remove</button>
                                         </div>
                                     </div>
-                            @endforeach
+                                </div>
+                            
+                                    @endforeach
 
                             @else
                             <div class="card-body p-4">

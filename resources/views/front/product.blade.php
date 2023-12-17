@@ -18,7 +18,7 @@
             <div class="row ">
                 @include('front.account.common.message')
                 <div class="col-md-5">
-                    <div id="product-carousel" class="carousel slide" data-bs-ride="carousel">
+                    <div id="product-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                         <div class="carousel-inner bg-light">
 
                             @if ($product->product_images)

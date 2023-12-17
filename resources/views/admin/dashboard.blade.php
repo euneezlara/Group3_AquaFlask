@@ -72,7 +72,7 @@
                                 <div class="inner">
                                     <!-- Content for the fourth box -->
                                     <h3>₱{{number_format($totalRevenue,2)}}</h3>
-                                    <p>Total Sale</p>
+                                    <p>Total Sales</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
